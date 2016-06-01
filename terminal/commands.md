@@ -12,3 +12,8 @@ $ docker cp file.txt ContainerID:/somefolder/file.txt
 # copy form running image to host
 $ docker cp ContainerID:/somefolder/file.txt file.txt 
 
+# delete all containers
+$ docker rm $(docker ps -a -q)
+
+# delete all images
+$ docker rmi $(docker images -q)
