@@ -1,0 +1,44 @@
+# ----------------------------------------------------------------------------
+# docker is configured to use the default machine with IP 192.168.XX.XXX
+
+# ----------------------------------------------------------------------------
+# BASE FOLDER CONTENTS
+
+./Dockerfile  [file]
+./host  [folder]
+./host/html  [folder]
+./host/html/index.html  [file]
+
+# ----------------------------------------------------------------------------
+# ./Dockerfile
+
+FROM nginx:latest
+COPY host/html /usr/share/nginx/html
+
+# ----------------------------------------------------------------------------
+# ./host/html/index.html
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+    </body>
+</html>
+
+# ----------------------------------------------------------------------------
+# Commands
+
+$ docker build -t nginx-custom .
+$ docker run --name nginx-a -d -p 8080:80 nginx-custom
+# 8080:80 - hostPort:containerPort
+
+# ----------------------------------------------------------------------------
+# Browser URL
+
+192.168.XX.XXX:8080
+
+# ----------------------------------------------------------------------------
