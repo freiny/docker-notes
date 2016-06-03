@@ -30,5 +30,10 @@ $ mysql logs
 $ docker logs db
 
 # mysql shell
-$ mysql -u root -p -e "create database somedb" 
+$ mysql -u root -p -e "create database somedb"
 $ mysql -u root -pabc -e "show databases"
+
+# Reset/Fix Docker when giving following message:
+# You may want to check your internet connection or if you are behind a proxy..
+$ docker-machine restart default      # Restart the environment
+$ eval $(docker-machine env default)  # Refresh your environment settings
