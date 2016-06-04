@@ -1,0 +1,33 @@
+# ----------------------------------------------------------------------------
+# docker is configured to use the default machine with IP 192.168.XX.XXX
+
+# ----------------------------------------------------------------------------
+# BASE FOLDER CONTENTS
+
+./Dockerfile  [file]
+./host  [folder]
+./host/gitlab  [folder]
+./host/gitlab/config  [folder]
+./host/gitlab/data  [folder]
+./host/gitlab/logs  [folder]
+
+# ----------------------------------------------------------------------------
+# ./Dockerfile
+
+# ----------------------------------------------------------------------------
+# Commands
+
+$ docker run --detach \
+--publish 443:443 --publish 80:80 --publish 2222:22 \
+--name gitlab --restart always \
+--volume /host/gitlab/config:/etc/gitlab \
+--volume /host/gitlab/logs:/var/log/gitlab \
+--volume /host/gitlab/data:/var/opt/gitlab \
+gitlab/gitlab-ce:latest
+
+# ----------------------------------------------------------------------------
+# Browser URL
+
+192.168.XX.XXX
+
+# ----------------------------------------------------------------------------
