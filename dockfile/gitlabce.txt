@@ -18,11 +18,11 @@
 # Commands
 
 $ docker run --detach \
---publish 443:443 --publish 80:80 --publish 2222:22 \
+--publish 443:443 --publish 8080:80 --publish 2222:22 \
 --name gitlab --restart always \
---volume /host/gitlab/config:/etc/gitlab \
---volume /host/gitlab/logs:/var/log/gitlab \
---volume /host/gitlab/data:/var/opt/gitlab \
+--volume /srv/gitlab/config:/etc/gitlab \
+--volume /srv/gitlab/logs:/var/log/gitlab \
+--volume /srv/gitlab/data:/var/opt/gitlab \
 gitlab/gitlab-ce:latest
 
 # ----------------------------------------------------------------------------
