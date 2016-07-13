@@ -1,2 +1,0 @@
-# Grab base image from DockerHub
-$ docker pull alpine:3.4
