@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run --name fNodeFE -p 20080:20080 -v $FFRONTEND/code:/code -it f-node:0.1 sh -c "cd /code; npm install; npm start; /bin/sh"
