@@ -1,0 +1,14 @@
+#!/bin/bash
+ITAG=f-alpine:1
+BASE=alpine:3.4
+CMDS="apk add --update bash nano"
+
+
+docker pull $BASE
+
+docker run --name cname $BASE sh -c "$CMDS"
+docker commit cname iname
+docker rm cname
+
+docker tag iname $ITAG
+docker rmi iname
