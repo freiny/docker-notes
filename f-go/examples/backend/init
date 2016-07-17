@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ITAG=f-go:1
+CNAME=fgobe
+
+CMDS="mkdir /home/go; cd /code; go build server.go; ./server; /bin/bash"
+ENVS="-e GOPATH='/home/go'"
+
+CODEPATH=$FDOCKER/f-go/examples/backend/code
+
+docker run $ENVS --name $CNAME -p 10080:10080 -v $CODEPATH:/code -it $ITAG sh -c "$CMDS"
+
+
+
+# #!/bin/bash
+# CODEPATH=$FDOCKER/f-node/examples/backend/code
+# HOMEPATH=/home/dev
+# docker run --name fNodeBE -p 10080:10080 -v $CODEPATH:$HOMEPATH/code --user="dev" -it f-node:1 bash --login -c "cd $HOMEPATH/code; npm install; npm start"

@@ -1,0 +1,15 @@
+#!/bin/bash
+BASE=f-alpine:latest
+
+ITAG=f-go:1
+docker rmi $ITAG
+
+# CMDS="apk add --update git go"
+CMDS="apk add --update go"
+
+docker run --name cname $BASE sh -c "$CMDS"
+docker commit cname iname
+docker rm cname
+
+docker tag iname $ITAG
+docker rmi iname

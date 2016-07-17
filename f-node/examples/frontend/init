@@ -1,3 +1,5 @@
 #!/bin/bash
+ITAG=f-node:1
 CODEPATH=$FDOCKER/f-node/examples/frontend/code
-docker run --name fNodeBE -p 20080:20080 -v $CODEPATH:/code -it f-node:1 sh -c "cd /code; npm install; npm start; /bin/bash"
+HOMEPATH=/home/dev
+docker run --name fNodeBE -p 20080:20080 -v $CODEPATH:$HOMEPATH/code --user="dev" -it $ITAG bash --login -c "cd $HOMEPATH/code; npm install; npm start"

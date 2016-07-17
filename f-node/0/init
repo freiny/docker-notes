@@ -1,9 +1,10 @@
 #!/bin/bash
-BASE=f-alpine:1
+BASE=f-alpine:2
 ITAG=f-node:0
 
 CMDS="apk add --update nodejs"
 
+docker rmi $ITAG
 docker pull $BASE
 
 docker run --name cname $BASE sh -c "$CMDS"

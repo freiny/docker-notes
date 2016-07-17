@@ -1,0 +1,3 @@
+#!/bin/bash
+CODEPATH=$FDOCKER/f-node/examples/frontend/code
+docker run --name fNodeBE -p 20080:20080 -v $CODEPATH:/code -it f-node:1 sh -c "cd /code; npm install; npm start; /bin/bash"

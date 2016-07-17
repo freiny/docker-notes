@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ITAG=f-go:3
+docker rmi $ITAG
+
+BASE=f-go:0
+
+CMDS="go get github.com/codegangsta/gin"
+
+docker run -t --user="dev" --name cname $BASE bash --login -c "$CMDS"
+
+docker commit cname iname
+docker rm cname
+
+docker tag iname $ITAG
+docker rmi iname

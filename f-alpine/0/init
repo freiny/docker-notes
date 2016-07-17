@@ -1,10 +1,11 @@
 #!/bin/bash
-BASE=alpine:3.4
 ITAG=f-alpine:0
+docker rmi $ITAG
+
+BASE=alpine:3.4
+docker pull $BASE
 
 CMDS="apk add --update bash"
-
-docker pull $BASE
 
 docker run --name cname $BASE sh -c "$CMDS"
 docker commit cname iname

@@ -1,0 +1,19 @@
+#!/bin/bash
+ITAG=f-go:2
+docker rmi $ITAG
+
+BASE=f-go:0
+./../0/init
+
+CMDS="
+apk add --update git go
+GOPATH=/home/dev/go
+go get github.com/codegangsta/gin
+"
+
+docker run --user="dev" --name cname $BASE bash -c "$CMDS"
+docker commit cname iname
+docker rm cname
+
+docker tag iname $ITAG
+docker rmi iname
