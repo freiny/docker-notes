@@ -1,6 +1,5 @@
 'use strict';
-
-console.log(process.env.HTTP_PORT)
+// console.log(process.env.HTTP_PORT)
 
 const PORT = 20080;
 

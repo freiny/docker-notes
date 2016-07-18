@@ -1,15 +1,26 @@
 #!/bin/bash
-BASE=f-alpine:latest
+IMGNAME=f-go
+IMGTAG=1
+IMGID=$IMGNAME:$IMGTAG
 
-ITAG=f-go:1
-docker rmi $ITAG
+BASENAME=f-alpine
+BASETAG=latest
+BASEID=$BASENAME:$BASETAG
 
-# CMDS="apk add --update git go"
-CMDS="apk add --update go"
+echo "*********************************** START " $IMGID
+docker rmi $IMGID
+$FDOCKER/$BASENAME/$BASETAG/init
+echo "*********************************** RUNNING " $IMGID
+cd $FDOCKER/$IMGNAME/$IMGTAG
+echo $IMGID " " $PWD
 
-docker run --name cname $BASE sh -c "$CMDS"
+CMDS="apk add --update git go"
+
+docker run --name cname $BASEID sh -c "$CMDS"
 docker commit cname iname
 docker rm cname
 
-docker tag iname $ITAG
+docker tag iname $IMGID
 docker rmi iname
+
+echo "*********************************** DONE " $IMGID

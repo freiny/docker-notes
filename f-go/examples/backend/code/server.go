@@ -13,5 +13,5 @@ func main() {
 }
 
 func onDefault(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello asdf world!")
+	io.WriteString(w, "BE Hello world!")
 }

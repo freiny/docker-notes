@@ -1,16 +1,27 @@
 #!/bin/bash
+IMGNAME=f-go
+IMGTAG=3
+IMGID=$IMGNAME:$IMGTAG
 
-ITAG=f-go:3
-docker rmi $ITAG
+BASENAME=f-go
+BASETAG=0
+BASEID=$BASENAME:$BASETAG
 
-BASE=f-go:0
+echo "*********************************** START " $IMGID
+docker rmi $IMGID
+$FDOCKER/$BASENAME/$BASETAG/init
+echo "*********************************** RUNNING " $IMGID
+cd $FDOCKER/$IMGNAME/$IMGTAG
+echo $IMGID " " $PWD
 
 CMDS="go get github.com/codegangsta/gin"
 
-docker run -t --user="dev" --name cname $BASE bash --login -c "$CMDS"
+docker run -t --user="dev" --name cname $BASEID bash --login -c "$CMDS"
 
 docker commit cname iname
 docker rm cname
 
-docker tag iname $ITAG
+docker tag iname $IMGID
 docker rmi iname
+
+echo "*********************************** DONE " $IMGID

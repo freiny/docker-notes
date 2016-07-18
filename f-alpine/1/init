@@ -1,15 +1,26 @@
 #!/bin/bash
-ITAG=f-alpine:1
-docker rmi $ITAG
+IMGNAME=f-alpine
+IMGTAG=1
+IMGID=$IMGNAME:$IMGTAG
 
-BASE=alpine:3.4
-docker pull $BASE
+BASENAME=alpine
+BASETAG=3.4
+BASEID=$BASENAME:$BASETAG
+
+echo "*********************************** START " $IMGID
+docker rmi $IMGID
+$FDOCKER/$BASENAME/$BASETAG/init
+echo "*********************************** RUNNING " $IMGID
+cd $FDOCKER/$IMGNAME/$IMGTAG
+echo $IMGID " " $PWD
 
 CMDS="apk add --update bash nano"
 
-docker run --name cname $BASE sh -c "$CMDS"
+docker run --name cname $BASEID sh -c "$CMDS"
 docker commit cname iname
 docker rm cname
 
-docker tag iname $ITAG
+docker tag iname $IMGID
 docker rmi iname
+
+echo "*********************************** DONE " $IMGID

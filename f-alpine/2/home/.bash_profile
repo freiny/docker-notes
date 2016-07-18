@@ -1,8 +1,9 @@
 #****************************************
-export GOPATH=$HOME/dev/go
+export GOPATH=/home/dev/go
 export FROOT=/
 export FETC=/etc
-export FHOME=$HOME
+export HOME=/home/dev
+export FHOME=/home/dev
 export FBIN=$HOME/bin
 export FCODE=/code
 
@@ -92,9 +93,9 @@ dint(){ docker run -it -d $1; }
 alias d="docker "
 #****************************************
 kInit(){
-    kclear
+    # kclear
     kColors
-    kGitEditor
+    #kGitEditor
 }
 kInit
 #****************************************

@@ -1,9 +1,19 @@
 #!/bin/bash
-ITAG=f-alpine:2
-docker rmi $ITAG
 
-BASE=alpine:3.4
-docker pull $BASE
+IMGNAME=f-alpine
+IMGTAG=2
+IMGID=$IMGNAME:$IMGTAG
+
+BASENAME=alpine
+BASETAG=3.4
+BASEID=$BASENAME:$BASETAG
+
+echo "*********************************** START " $IMGID
+docker rmi $IMGID
+$FDOCKER/$BASENAME/$BASETAG/init
+echo "*********************************** RUNNING " $IMGID
+cd $FDOCKER/$IMGNAME/$IMGTAG
+echo $IMGID " " $PWD
 
 CMDS="
 apk add --update bash
@@ -13,17 +23,17 @@ mkdir /home/dev && chown -R dev: /home/dev
 chown -R dev: /home/dev
 mkdir -p /home/dev/bin /home/dev/code /home/dev/go
 PATH=$PATH:/home/dev/bin
-cd /home/dev
-HOME=/home/dev
-GOPATH=/home/dev/go
 chown -R dev: /home/dev
 "
 
-docker run --name cname $BASE sh -c "$CMDS"
+docker run --name cname $BASEID sh -c "$CMDS"
 cd home
 docker cp . cname:home/dev
+cd ..
 docker commit cname iname
 docker rm cname
 
-docker tag iname $ITAG
+docker tag iname $IMGNAME
 docker rmi iname
+
+echo "*********************************** DONE " $IMGID

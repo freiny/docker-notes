@@ -93,9 +93,9 @@ dint(){ docker run -it -d $1; }
 alias d="docker "
 #****************************************
 kInit(){
-    kclear
+    # kclear
     kColors
-    kGitEditor
+    #kGitEditor
 }
 kInit
 #****************************************

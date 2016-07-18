@@ -1,0 +1,9 @@
+#!/bin/bash
+IMGID=f-node:1
+CNAME="fnodefe"
+
+CODEPATH=$FDOCKER/f-go/examples/frontend/code
+
+CMDS="cd /home/dev/code; go build -o main; ./main;"
+
+docker run --name $CNAME -p 20080:20080 -v $CODEPATH:/home/dev/code --user="dev" -it $IMGID bash --login -c "$CMDS"

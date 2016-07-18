@@ -1,8 +1,0 @@
-docker pull alpine:3.4
-cd $FDOCKER/f-alpine/latest
-./init
-cd $FDOCKER/f-go/0
-./init
-cd $FDOCKER/f-go/latest
-./init
-

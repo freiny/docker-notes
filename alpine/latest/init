@@ -1,0 +1,14 @@
+#!/bin/bash
+IMGNAME=alpine
+IMGTAG=latest
+IMGID=$IMGNAME:$IMGTAG
+
+echo "*********************************** START " $IMGID
+docker rmi $IMGID
+echo "*********************************** RUNNING " $IMGID
+cd $FDOCKER/$IMGNAME/$IMGTAG
+echo $IMGID " " $PWD
+
+docker pull $IMGID
+
+echo "*********************************** DONE " $IMGID

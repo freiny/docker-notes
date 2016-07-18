@@ -1,9 +1,23 @@
 #!/bin/bash
-ITAG=f-go:2
-docker rmi $ITAG
+################################
+# this version most likely not working
+# use v3+ or latest
+################################
 
-BASE=f-go:0
-./../0/init
+IMGNAME=f-go
+IMGTAG=2
+IMGID=$IMGNAME:$IMGTAG
+echo "*********************************** START " $IMGID
+
+BASENAME=f-go
+BASETAG=0
+BASEID=$BASENAME:$BASETAG
+
+docker rmi $IMGID
+
+cd $FDOCKER/$BASENAME/$BASETAG
+./init
+cd $FDOCKER/$IMGNAME/$IMGTAG
 
 CMDS="
 apk add --update git go
@@ -11,9 +25,10 @@ GOPATH=/home/dev/go
 go get github.com/codegangsta/gin
 "
 
-docker run --user="dev" --name cname $BASE bash -c "$CMDS"
+docker run --user="dev" --name cname $BASEID bash -c "$CMDS"
 docker commit cname iname
 docker rm cname
 
-docker tag iname $ITAG
+docker tag iname $IMGID
 docker rmi iname
+echo "*********************************** DONE " $IMGID
