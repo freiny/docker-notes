@@ -4,6 +4,7 @@ CNAME="fgobe"
 
 CODEPATH=$FDOCKER/f-go/examples/backend/code
 
-CMDS="cd /home/dev/code; go build -o main; ./main;"
+# CMDS="cd /home/dev/code; go build -o main; ./main;"
+CMDS="cd /home/dev/code; gin -p 10080 -a 30080 run server.go"
 
 docker run --name $CNAME -p 10080:10080 -v $CODEPATH:/home/dev/code --user="dev" -it $IMGID bash --login -c "$CMDS"

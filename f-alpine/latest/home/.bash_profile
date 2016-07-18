@@ -8,6 +8,7 @@ export FBIN=$HOME/bin
 export FCODE=/code
 
 export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:/usr/local/go/bin
 #****************************************
 /()				{ cd /; }

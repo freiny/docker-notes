@@ -73,6 +73,7 @@ jspm_packages
 ####################################################
 # Golang generated files
 main
+gin-bin
 
 ####################################################
 # Rapid testing
