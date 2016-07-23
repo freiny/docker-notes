@@ -1,0 +1,8 @@
+imgName=dev
+imgVer=latest
+
+baseName=alpine
+baseVer=3.4
+
+user=freiny
+userHome=$(dPath scripts)/dev/latest/freiny

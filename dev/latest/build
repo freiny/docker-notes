@@ -1,0 +1,23 @@
+#!/bin/bash
+cmds="
+apk add --update bash
+apk add --update nano
+apk add --update git
+apk add --update inotify-tools
+adduser -S $user
+mkdir /home/$user && chown -R $user: /home/$user
+chown -R $user: /home/$user
+mkdir -p /home/$user/bin /home/$user/code /home/$user/go
+PATH=$PATH:/home/$user/bin
+chown -R $user: /home/$user
+"
+
+docker run --name cname $baseName:$baseVer sh -c "$cmds"
+# cd home
+# docker cp . cname:home/$user
+# cd ..
+docker commit cname iname
+docker rm cname
+
+docker tag iname $imgName:$imgVer
+docker rmi iname
