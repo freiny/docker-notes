@@ -6,6 +6,7 @@ apk add --update inotify-tools
 apk add --update bash
 apk add --update nano
 apk add --update git
+apk add --update go
 adduser -S $userName
 chown -R $userName: /home/$userName
 echo $userName 'ALL=(ALL) ALL' >> /etc/sudoers

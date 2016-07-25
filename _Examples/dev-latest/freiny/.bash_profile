@@ -1,12 +1,15 @@
 cd ~
 #****************************************
-export GOPATH=~/go
+export GOPATH=~/dev
 export PATH=$PATH:~/bin
-export PATH=$PATH:~/go/bin
-#export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:~/dev/bin
+export PATH=$PATH:/usr/local/go/bin
+export DOCKER_IMAGES=~/docker/images
+export DOCKER_SCRIPTS=~/docker/scripts
+export GITHUB_USER=~/dev/src/github.com/freiny
+export GITHUB_USERNAME=freiny
 #****************************************
 alias dk="docker "
-alias dc="docker-compose "
 #****************************************
 # Folder Echo: f <Folder Abbreviation> <Sub-Folder>
 f(){
@@ -14,7 +17,7 @@ f(){
 
 	case $1 in
 		# ---------------------------------------------------
-		j)	echo ~/dev/src/github.com/freiny/docker-scripts/f-alpine/0;;
+		j)	echo $DOCKER_SCRIPTS/dev/latest;;
 		# ---------------------------------------------------
 		/|root)		echo "/$2";;
 		tmp)		echo "/tmp/$2";;
@@ -25,25 +28,25 @@ f(){
 		lib)		echo "$home/Library/$2";;
 		down)		echo "$home/Downloads/$2";;
 		bin)		echo "$home/bin/$2";;
-		dev)		echo "$home/dev/$2";;
+		hdev)		echo "$home/dev/$2";;
 		# ---------------------------------------------------
 		hub|github)	echo "$home/dev/src/github.com/$2";;
-		fhub|fh)	echo "$home/dev/src/github.com/freiny/$2";;
-		local|l)	echo "$home/dev/src/github.com/freiny/_local/$2";;
+		fhub|fh)	echo "$GITHUB_USER/$2";;
+		local|l)	echo "$GITHUB_USER/_local/$2";;
 		# ---------------------------------------------------
 		users)		echo "$home/users/$2";;
 		freiny|f)	echo "$home/users/freiny/$2";;
 		# ---------------------------------------------------
-		scripts|docks|dock)	echo "$home/dev/src/github.com/freiny/docker-scripts/$2";;
-		images|docki)		echo "$home/dev/src/github.com/freiny/_local/docker/images/$2";;
-		devi)				echo "$home/dev/src/github.com/freiny/docker-scripts/dev/latest/$2";;
+		scripts|docks|dock)	echo "$DOCKER_SCRIPTS/$2";;
+		images|docki)		echo "$DOCKER_IMAGES/$2";;
 		# ---------------------------------------------------
-		conf)		echo "$home/dev/src/github.com/freiny/config/$2";;
-		bash)		echo "$home/dev/src/github.com/freiny/config/bash-host/$2";;
-		nano)		echo "$home/dev/src/github.com/freiny/config/nano/$2";;
-		alpine)		echo "$home/dev/src/github.com/freiny/docker-scripts/alpine/$2";;
-		f-alpine)	echo "$home/dev/src/github.com/freiny/docker-scripts/f-alpine/$2";;
-		f-go)		echo "$home/dev/src/github.com/freiny/docker-scripts/f-go/$2";;
+		conf)		echo "$GITHUB_USER/config/$2";;
+		bash)		echo "$GITHUB_USER/config/bash-host/$2";;
+		nano)		echo "$GITHUB_USER/config/nano/$2";;
+		alpine)		echo "$GITHUB_USER/docker-scripts/alpine/$2";;
+		f-alpine)	echo "$GITHUB_USER/docker-scripts/f-alpine/$2";;
+		f-go)		echo "$GITHUB_USER/docker-scripts/f-go/$2";;
+		dev)		echo "$GITHUB_USER/docker-scripts/dev/latest/$2";;
 		# ---------------------------------------------------
 		-help|--help|-h|--h)	echo "Folder Echo: f <Folder Abbreviation> <Sub-Folder>";;
 		# ---------------------------------------------------
@@ -104,14 +107,30 @@ d(){
 
 	case $1 in
 		# ---------------------------------------------------
-		load)	dLoad $2 $3 $4 $5;;
+		load|build)	dLoad $2 $3 $4 $5;;
 		run)	source ./cfg
 				source ./run
-				# docker run -it $2:$3 /bin/bash
 				;;
-		rm)		rmia;;
-		rmi)	rmi $2 $3;;
-		RMI)	RMI $2 $3;;
+		rmc)	docker stop $(docker ps -a -q)
+				docker rm $(docker ps -a -q)
+				docker rmi $(docker images -f "dangling=true" -q)
+				;;
+		rmi)	if [[ $2 == "" ]]; then
+					docker rmi $(docker images -a -q)
+				else
+					docker rmi $2:$3
+				fi
+				;;
+		RMI)	if [[ $2 == "" ]]; then
+					rm -- ~/docker/images/*.*
+				else
+					rm -- ~/docker/images/$2-$3.tgz
+				fi
+				;;
+		rm)		d rmc
+				d rmi $2 $3
+				d RMI $2 $3
+				;;
 		vi)		docker images -a;;
 		VI)		tpwd=$PWD;cd $(f images);ls -a;cd $tpwd;;
 		vc)		docker ps -a;;
@@ -120,7 +139,7 @@ d(){
 				echo
 				docker ps -a
 				echo
-				tpwd=$PWD;cd $(f images);ls -a;cd $tpwd
+				ls -a ~/docker/images;
 				echo
 				;;
 		cc)		docker stop $(docker ps -a -q)
@@ -163,7 +182,7 @@ g(){
 }
 
 #****************************************
-source $(f docks)/fdockerutil.sh
+source ~/fdockerutil.sh
 #****************************************
 /()				{ cd /; }
 .()				{ cd ./..; }

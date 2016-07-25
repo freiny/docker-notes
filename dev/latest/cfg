@@ -4,5 +4,5 @@ imgVer=latest
 baseName=alpine
 baseVer=3.4
 
-user=freiny
-userHome=$(dPath scripts)/dev/latest/freiny
+userName=freiny
+userHome=$DOCKER_SCRIPTS/_Examples/dev-latest/$userName
