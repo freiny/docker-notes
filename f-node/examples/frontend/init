@@ -1,2 +1,0 @@
-#!/bin/bash
-$FDOCKER/f-node/latest/init

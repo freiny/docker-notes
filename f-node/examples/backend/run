@@ -1,9 +1,0 @@
-#!/bin/bash
-IMGID=f-node:latest
-CNAME="fnodebe"
-
-CODEPATH=$FDOCKER/f-node/examples/backend/code
-
-CMDS="cd /home/dev/code; npm install; npm start;"
-
-docker run --name $CNAME -p 10080:10080 -v $CODEPATH:/home/dev/code --user="dev" -it $IMGID bash --login -c "$CMDS"

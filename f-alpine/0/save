@@ -1,9 +1,0 @@
-#!/bin/bash
-cmds="apk add --update bash nano"
-
-docker run --name cname $baseId sh -c "$cmds"
-docker commit cname iname
-docker rm cname
-
-docker tag iname $imgId
-docker rmi iname

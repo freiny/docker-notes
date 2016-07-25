@@ -8,6 +8,8 @@ export DOCKER_IMAGES=~/docker/images
 export DOCKER_SCRIPTS=~/docker/scripts
 export GITHUB_USER=~/dev/src/github.com/freiny
 export GITHUB_USERNAME=freiny
+export DOCKER_BACKEND_PORT=10080
+export DOCKER_FRONTEND_PORT=20080
 #****************************************
 alias dk="docker "
 #****************************************
