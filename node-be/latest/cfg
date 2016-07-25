@@ -1,0 +1,8 @@
+imgName=node-be
+imgVer=latest
+
+baseName=alpine
+baseVer=3.4
+
+userName=freiny
+userHome=$DOCKER_SCRIPTS/_Examples/node-be-latest/$userName

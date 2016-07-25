@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run -it --user=$userName -p $DOCKER_BACKEND_PORT:$DOCKER_BACKEND_PORT -v $userHome:/home/$userName --name cname $imgName:$imgVer bash --login

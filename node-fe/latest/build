@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cmds="
+apk add --update sudo
+apk add --update inotify-tools
+apk add --update bash
+apk add --update nano
+apk add --update git
+apk add --update python
+apk add --update nodejs
+adduser -S $userName
+chown -R $userName: /home/$userName
+echo $userName 'ALL=(ALL) ALL' >> /etc/sudoers
+echo root:$DOCKER_ROOT_PASSWORD | chpasswd
+echo $userName:$DOCKER_USER_PASSWORD | chpasswd
+"
+
+docker run --name cname $baseName:$baseVer sh -c "$cmds"
+docker commit cname iname
+docker rm cname
+
+docker tag iname $imgName:$imgVer
+docker rmi iname
