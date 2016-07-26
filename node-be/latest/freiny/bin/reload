@@ -1,0 +1,16 @@
+#!/bin/bash
+nodesrc=~/node/src
+cd $nodesrc
+npm install
+npm start &
+ps -ef
+echo "*********************** APP READY"
+
+while inotifywait -e modify $nodesrc; do
+
+	killall -9 node
+	npm start &
+	ps ef
+	echo "*********************** APP READY"
+
+done

@@ -5,4 +5,6 @@ baseName=alpine
 baseVer=3.4
 
 userName=freiny
-userHome=$DOCKER_SCRIPTS/_Examples/node-fe-latest/$userName
+userHome=$DOCKER_SCRIPTS/node-fe/latest/$userName
+
+cName=$userName-$imgName-$imgVer

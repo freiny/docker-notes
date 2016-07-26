@@ -1,0 +1,5 @@
+#!/bin/bash
+rm ./$userName/go/src/main
+
+docker stop $cName
+docker rm $cName

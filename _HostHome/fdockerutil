@@ -1,0 +1,186 @@
+#!/bin/bash
+# ***********************************************************************
+# Place environment variables in .bash_profile for cfg file usage
+# EXAMPLE VALUES:
+export DOCKER_USERS_PATH=~/users
+export GITHUB_USER_PATH=~/dev/src/github.com/freiny
+export DOCKER_SCRIPTS=~/dev/src/github.com/freiny/docker-scripts
+export DOCKER_LAUNCH=~/dev/src/github.com/freiny/docker-scripts/_launch
+export DOCKER_IMAGES=~/docker/images
+export DOCKER_USER_PASSWORD=$(dup)
+export DOCKER_ROOT_PASSWORD=$(drp)
+export DOCKER_BACKEND_PORT=10080
+export DOCKER_FRONTEND_PORT=20080
+# ***********************************************************************
+alias d="fdu "
+alias dk="docker "
+# ***********************************************************************
+# Freiny Docker Utility - Custom Command Executor: fdu <Command> [Arguments...]
+fdu(){
+	case $1 in
+		# ---------------------------------------------------
+		# Build Image: When using no arguments, Build relative to the Image Builder Script Path
+		# $ cd $DOCKER_SCRIPTS/dev/latest
+		# $ fdu build , $ fdu build alpine 3.4 , $ fdu build dev latest alpine 3.4
+		build|b)	dLoad $2 $3 $4 $5;;
+
+		# Run Image: Run relative to the Image Builder Script Path
+		# $ cd $DOCKER_SCRIPTS/dev/latest
+		# $ fdu run
+		run|r)
+					if [[ $2 != "" ]]; then
+						cd $DOCKER_SCRIPTS/$2/$3
+					fi
+					source ./cfg
+					source ./run
+					;;
+		clean|c)	source ./cfg
+					source ./clean
+					;;
+		# Cluster Build: Build multi-container environment
+		cbuild|cb)	source ./cbuild
+					;;
+		# Cluster Run: Run multi-container environment
+		crun|cr)	source ./crun
+					;;
+
+		#Remove all docker containers
+		rmc)		docker stop $(docker ps -a -q)
+					docker rm $(docker ps -a -q)
+					docker rmi $(docker images -f "dangling=true" -q)
+					;;
+		#Remove all loaded docker images
+		rmi)		if [[ $2 == "" ]]; then
+						docker rmi $(docker images -a -q)
+					else
+						docker rmi $2:$3
+					fi
+					;;
+		# Remove all gzipped docker images in your docker images folder
+		RMI)		if [[ $2 == "" ]]; then
+						rm -- ~/docker/images/*.*
+					else
+						rm -- ~/docker/images/$2-$3.tgz
+					fi
+					;;
+		# Remove all containers, loaded images, and gzipped images
+		rm)			d rmc
+					d rmi $2 $3
+					d RMI $2 $3
+					;;
+		# View images
+		vi)			docker images -a;;
+		# View gzipped images
+		VI)			tpwd=$PWD;cd $(f images);ls -a;cd $tpwd;;
+		# View containers
+		vc)			docker ps -a;;
+		# View images, containers, and gzipped images
+		v)			echo
+					docker images -a
+					echo
+					docker ps -a
+					echo
+					ls -a ~/docker/images;
+					echo
+					;;
+		# Clear containers
+		clearc|cc)	docker stop $(docker ps -a -q)
+					docker rm $(docker ps -a -q)
+					docker rmi $(docker images -f "dangling=true" -q)
+					;;
+		# Clear images
+		cleari|ci)	docker rm -f $1
+					docker rmi -f $1
+					docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
+					;;
+		# Clear containers and images
+		clear)		docker stop $(docker ps -a -q)
+					docker rm $(docker ps -a -q)
+					docker rmi $(docker images -f "dangling=true" -q)
+					docker rm -f $1
+					docker rmi -f $1
+					docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
+					;;
+		# ---------------------------------------------------
+		*|"")		echo "Freiny Docker Utility - Custom Command Executor: fdu <Command> [Arguments...]"
+	esac
+}
+
+# ***********************************************************************
+# dLoad - Internal Utility for Build Automation
+dLoad(){
+	#!/bin/bash
+	local imgName=$1
+	local imgVer=$2
+	local baseName=$3
+	local baseVer=$4
+
+	echo "[START] dLoad $imgName $imgVer $baseName $baseVer"
+
+	# does dLoad have no parameters
+	if [[ "$imgName" == "" ]]; then
+		# check for config file
+		if [ -e "./cfg" ]; then
+			# load parameters from config file and re-run dLoad
+			source ./cfg
+			if [[ "$imgName" != "" && "$imgVer" != "" ]]; then
+				# check if image file exists, if so load it
+				imgFile=$DOCKER_IMAGES/$imgName-$imgVer.tgz
+				if [ -e "$imgFile" ]; then
+					gunzip -c $imgFile | docker load
+				else
+					dLoad $imgName $imgVer $baseName $baseVer
+				fi
+			else
+				echo "[ERROR] dLoad $imgName $imgVer $baseName $baseVer : cfg file found : missing parameters"
+				return 0
+			fi
+		else
+			echo "[ERROR] dLoad $imgName $imgVer $baseName $baseVer : cfg file not found"
+			return 0
+		fi
+
+	# does dLoad have all four parameters
+	elif [[ "$imgName" != "" && "$imgVer" != "" && "$baseName" != "" && "$baseVer" != "" ]]; then
+		dLoad $baseName $baseVer
+		dBuild $imgName $imgVer $baseName $baseVer
+
+	# does dLoad have at least first two parameters
+	elif [[ "$imgName" != "" && "$imgVer" != "" ]]; then
+		# check if image file exists, if so load it
+		imgFile=$DOCKER_IMAGES/$imgName-$imgVer.tgz
+		if [ -e "$imgFile" ]; then
+			gunzip -c $imgFile | docker load
+		else
+			# check config file for base image
+			source $DOCKER_SCRIPTS/$imgName/$imgVer/cfg
+			if [[ "$baseName" == "" ]]; then
+				# config file has no base image, so this is the base image, build it
+				echo "  $imgFile not found. Running dBuild"
+				dBuild $imgName $imgVer $baseName $baseVer
+			else
+				# config file had all four parameters re-run dLoad with all parameters
+				dLoad $imgName $imgVer $baseName $baseVer
+			fi
+		fi
+
+	fi
+	echo "[END] dLoad $imgName $imgVer $baseName $baseVer"
+}
+# ***********************************************************************
+# dLoad - Internal Utility for Build Automation
+dBuild(){
+	imgName=$1
+	imgVer=$2
+	imgId=$imgName:$imgVer
+	imgFile=$DOCKER_IMAGES/$imgName-$imgVer.tgz
+	baseName=$3
+	baseVer=$4
+	baseId=$baseName:$baseVer
+
+	echo "[START] dBuild $imgName $imgVer $baseName $baseVer"
+	source $DOCKER_SCRIPTS/$imgName/$imgVer/build
+	docker save $imgId | gzip -c > $imgFile
+	echo "[END] dBuild $imgName $imgVer $baseName $baseVer"
+}
+# ***********************************************************************

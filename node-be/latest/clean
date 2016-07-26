@@ -1,0 +1,6 @@
+#!/bin/bash
+rm -rf ./$userName/.npm
+rm -rf ./$userName/node/src/node_modules
+
+docker stop $cName
+docker rm $cName

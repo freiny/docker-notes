@@ -1,2 +1,4 @@
 #!/bin/bash
-docker run -it --user=$userName -v $userHome:/home/$userName --name cname $imgName:$imgVer bash --login
+docker stop $cName
+docker rm $cName
+docker run -it --user=$userName -v $userHome:/home/$userName --name $cName $imgName:$imgVer bash --login

@@ -1,0 +1,4 @@
+clusterName=cluster
+
+d build cluster node-be
+d build cluster node-fe
