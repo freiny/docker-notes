@@ -1,0 +1,7 @@
+userName=freiny
+clusterName=cluster
+
+clusterNodes=(
+	node-be
+	node-fe
+)

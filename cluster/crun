@@ -1,2 +1,0 @@
-d run cluster node-be &
-d run cluster node-fe &

@@ -98,7 +98,18 @@ k(){
 		*|"")	echo "Custom Command Executor: k <Command>"
 	esac
 }
-
+#****************************************
+new(){
+	case $1 in
+		# ---------------------------------------------------
+		bash)
+			# New Bash Script
+			touch $2; echo "#!/bin/bash" >> $2; chmod 744 $2; nano $2
+		;;
+		# ---------------------------------------------------
+		*|"")	echo "New File Creator: new <Command>"
+	esac
+}
 #****************************************
 g(){
 	local home=~

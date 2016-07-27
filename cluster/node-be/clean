@@ -1,6 +1,3 @@
 #!/bin/bash
 rm -rf $DOCKER_SCRIPTS/$imgName/$imgVer/$userName/.npm
 rm -rf $DOCKER_SCRIPTS/$imgName/$imgVer/$userName/node/src/node_modules
-
-docker stop $cName
-docker rm $cName

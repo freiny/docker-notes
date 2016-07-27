@@ -19,88 +19,152 @@ alias dk="docker "
 fdu(){
 	case $1 in
 		# ---------------------------------------------------
-		# Build Image: When using no arguments, Build relative to the Image Builder Script Path
-		# $ cd $DOCKER_SCRIPTS/dev/latest
-		# $ fdu build , $ fdu build alpine 3.4 , $ fdu build dev latest alpine 3.4
-		build|b)	dLoad $2 $3 $4 $5;;
-
-		# Run Image: Run relative to the Image Builder Script Path
-		# $ cd $DOCKER_SCRIPTS/dev/latest
-		# $ fdu run
+		build|b)
+			# Build Image: When using no arguments, Build relative to the Image Builder Script Path
+			# $ cd $DOCKER_SCRIPTS/dev/latest
+			# $ fdu build , $ fdu build alpine 3.4 , $ fdu build dev latest alpine 3.4
+			dLoad $2 $3 $4 $5
+		;;
 		run|r)
-					if [[ $2 != "" ]]; then
-						cd $DOCKER_SCRIPTS/$2/$3
-					fi
-					source ./cfg
-					source ./run
-					;;
-		clean|c)	source ./cfg
-					source ./clean
-					;;
-		# Cluster Build: Build multi-container environment
-		cbuild|cb)	source ./cbuild
-					;;
-		# Cluster Run: Run multi-container environment
-		crun|cr)	source ./crun
-					;;
-
-		#Remove all docker containers
-		rmc)		docker stop $(docker ps -a -q)
-					docker rm $(docker ps -a -q)
-					docker rmi $(docker images -f "dangling=true" -q)
-					;;
-		#Remove all loaded docker images
-		rmi)		if [[ $2 == "" ]]; then
-						docker rmi $(docker images -a -q)
-					else
-						docker rmi $2:$3
-					fi
-					;;
-		# Remove all gzipped docker images in your docker images folder
-		RMI)		if [[ $2 == "" ]]; then
-						rm -- ~/docker/images/*.*
-					else
-						rm -- ~/docker/images/$2-$3.tgz
-					fi
-					;;
-		# Remove all containers, loaded images, and gzipped images
-		rm)			d rmc
-					d rmi $2 $3
-					d RMI $2 $3
-					;;
-		# View images
-		vi)			docker images -a;;
-		# View gzipped images
-		VI)			tpwd=$PWD;cd $(f images);ls -a;cd $tpwd;;
-		# View containers
-		vc)			docker ps -a;;
-		# View images, containers, and gzipped images
-		v)			echo
-					docker images -a
-					echo
-					docker ps -a
-					echo
-					ls -a ~/docker/images;
-					echo
-					;;
-		# Clear containers
-		clearc|cc)	docker stop $(docker ps -a -q)
-					docker rm $(docker ps -a -q)
-					docker rmi $(docker images -f "dangling=true" -q)
-					;;
-		# Clear images
-		cleari|ci)	docker rm -f $1
-					docker rmi -f $1
-					docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
-					;;
-		# Clear containers and images
-		clear)		docker stop $(docker ps -a -q)
-					docker rm $(docker ps -a -q)
-					docker rmi $(docker images -f "dangling=true" -q)
-					docker rm -f $1
-					docker rmi -f $1
-					docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
-					;;
+			# Run Image: Run relative to the Image Builder Script Path
+			# $ cd $DOCKER_SCRIPTS/dev/latest
+			# $ fdu run
+			if [[ $2 != "" ]]; then
+				cd $DOCKER_SCRIPTS/$2/$3
+			fi
+			source ./cfg
+			source ./clean
+			source ./run
+		;;
+		start)
+			# Start Container
+			source ./cfg
+			docker start -i $cName
+		;;
+		stop)
+			# Stop Container
+			source ./cfg
+			docker stop $cName
+		;;
+		clean|c)
+			# Clean Home Folder
+			source ./cfg
+			source ./clean
+			docker stop $cName
+			docker rm $cName
+		;;
+		cbuild|cb)
+			# Cluster Build: Build multi-container environment
+			source ./ccfg
+			for clusterNode in ${clusterNodes[@]}; do
+				d build $clusterName $clusterNode
+			done
+		;;
+		crun|cr)
+			# Cluster Run: Run multi-container environment
+			source ./ccfg
+			for clusterNode in ${clusterNodes[@]}; do
+				d run $clusterName $clusterNode &
+			done
+		;;
+		cstart|cr)
+			# Cluster Run: Run multi-container environment
+			source ./ccfg
+			for clusterNode in ${clusterNodes[@]}; do
+				cd $DOCKER_SCRIPTS/$clusterName/$clusterNode
+				d start $userName-$clusterName-$clusterNode &
+			done
+		;;
+		cstop|cr)
+			# Cluster Run: Run multi-container environment
+			source ./ccfg
+			for clusterNode in ${clusterNodes[@]}; do
+				cd $DOCKER_SCRIPTS/$clusterName/$clusterNode
+				d stop $userName-$clusterName-$clusterNode
+			done
+		;;
+		cclean|cr)
+			# Cluster Clean
+			for clusterNode in ${clusterNodes[@]}; do
+				source ./cfg
+				# source ./clean
+				# docker stop $cName
+				# docker rm $cName
+				# d stop $userName-$clusterName-$clusterNode &
+			done
+		;;
+		claunch|cl)
+			d cbuild
+			d crun
+		;;
+		rmc)
+			#Remove all docker containers
+			docker stop $(docker ps -a -q)
+			docker rm $(docker ps -a -q)
+			docker rmi $(docker images -f "dangling=true" -q)
+		;;
+		rmi)
+			#Remove all loaded docker images
+			if [[ $2 == "" ]]; then
+				docker rmi $(docker images -a -q)
+			else
+				docker rmi $2:$3
+			fi
+		;;
+		RMI)
+			# Remove all gzipped docker images in your docker images folder
+			if [[ $2 == "" ]]; then
+				rm -- ~/docker/images/*.*
+			else
+				rm -- ~/docker/images/$2-$3.tgz
+			fi
+		;;
+		rm)
+			# Remove all containers, loaded images, and gzipped images
+			d rmc
+			d rmi $2 $3
+			d RMI $2 $3
+		;;
+		vi)
+			# View images
+			docker images -a;;
+		VI)
+			# View gzipped images
+			tpwd=$PWD;cd $(f images);ls -a;cd $tpwd;;
+		vc)
+			# View containers
+			docker ps -a;;
+		v)
+			# View images, containers, and gzipped images
+			echo
+			docker images -a
+			echo
+			docker ps -a
+			echo
+			ls -a ~/docker/images;
+			echo
+		;;
+		clearc|cc)
+			# Clear containers
+			docker stop $(docker ps -a -q)
+			docker rm $(docker ps -a -q)
+			docker rmi $(docker images -f "dangling=true" -q)
+		;;
+		cleari|ci)
+			# Clear images
+			docker rm -f $1
+			docker rmi -f $1
+			docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
+		;;
+		clear)
+			# Clear containers and images
+			docker stop $(docker ps -a -q)
+			docker rm $(docker ps -a -q)
+			docker rmi $(docker images -f "dangling=true" -q)
+			docker rm -f $1
+			docker rmi -f $1
+			docker rmi -f $(docker images -a | grep "<none>" | cut "-c41-52")
+		;;
 		# ---------------------------------------------------
 		*|"")		echo "Freiny Docker Utility - Custom Command Executor: fdu <Command> [Arguments...]"
 	esac
