@@ -25,7 +25,7 @@ fdu(){
 			# $ fdu build , $ fdu build alpine 3.4 , $ fdu build dev latest alpine 3.4
 			dLoad $2 $3 $4 $5
 		;;
-		run|r)
+		run)
 			# Run Image: Run relative to the Image Builder Script Path
 			# $ cd $DOCKER_SCRIPTS/dev/latest
 			# $ fdu run
@@ -35,6 +35,17 @@ fdu(){
 			source ./cfg
 			source ./clean
 			source ./run
+		;;
+		rund)
+			# Run Image: Run relative to the Image Builder Script Path
+			# $ cd $DOCKER_SCRIPTS/dev/latest
+			# $ fdu run
+			if [[ $2 != "" ]]; then
+				cd $DOCKER_SCRIPTS/$2/$3
+			fi
+			source ./cfg
+			source ./clean
+			source ./rund
 		;;
 		start)
 			# Start Container
@@ -60,42 +71,52 @@ fdu(){
 				d build $clusterName $clusterNode
 			done
 		;;
-		crun|cr)
-			# Cluster Run: Run multi-container environment
+		crun)
 			source ./ccfg
 			for clusterNode in ${clusterNodes[@]}; do
-				d run $clusterName $clusterNode &
-			done
+				(d run $clusterName $clusterNode) &
+		 	done
 		;;
-		cstart|cr)
+		crund)
+			(
+			source ./ccfg
+			for clusterNode in ${clusterNodes[@]}; do
+				(d rund $clusterName $clusterNode) &
+		 	done
+			) &
+		;;
+		cstart)
 			# Cluster Run: Run multi-container environment
 			source ./ccfg
 			for clusterNode in ${clusterNodes[@]}; do
 				cd $DOCKER_SCRIPTS/$clusterName/$clusterNode
 				d start $userName-$clusterName-$clusterNode &
 			done
+			cd $DOCKER_SCRIPTS/$clusterName
 		;;
-		cstop|cr)
+		cstop)
 			# Cluster Run: Run multi-container environment
 			source ./ccfg
 			for clusterNode in ${clusterNodes[@]}; do
 				cd $DOCKER_SCRIPTS/$clusterName/$clusterNode
 				d stop $userName-$clusterName-$clusterNode
 			done
+			cd $DOCKER_SCRIPTS/$clusterName
 		;;
-		cclean|cr)
+		cclean)
 			# Cluster Clean
+			source ./ccfg
 			for clusterNode in ${clusterNodes[@]}; do
-				source ./cfg
-				# source ./clean
-				# docker stop $cName
-				# docker rm $cName
-				# d stop $userName-$clusterName-$clusterNode &
+				cd $DOCKER_SCRIPTS/$clusterName/$clusterNode
+				d clean
 			done
+			cd $DOCKER_SCRIPTS/$clusterName
 		;;
-		claunch|cl)
+		claunch)
+			# Cluster Launch
+			source ./ccfg
 			d cbuild
-			d crun
+			d crund
 		;;
 		rmc)
 			#Remove all docker containers
