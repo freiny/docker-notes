@@ -1,0 +1,13 @@
+#!/bin/bash
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -f "dangling=true" -q)
+
+docker rmi $(docker images -a -q)
+
+imagePrefix=noden1n3
+docker rmi "$imagePrefix"_nginx:latest
+docker rmi "$imagePrefix"_node1:latest
+docker rmi "$imagePrefix"_node2:latest
+docker rmi "$imagePrefix"_node3:latest
