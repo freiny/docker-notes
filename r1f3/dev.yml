@@ -1,0 +1,24 @@
+version: '2'
+services:
+
+  rp1:
+    build:
+      context: ./rp
+      dockerfile: dev.Dockerfile
+    links:
+      - fe1:fe1
+    ports:
+      - 3000:3000
+
+  fe1:
+    build:
+      context: ./fe
+      dockerfile: dev.Dockerfile
+    # command: echo "*************************** HOOOOOOOOOOO"
+    # command: sh -c source /home/devinit
+    # command: ls -a /home"
+    ports:
+      - 8081:8080
+    volumes:
+      - ./fe/repo/src:/src
+      - ./fe/home:/home
