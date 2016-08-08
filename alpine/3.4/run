@@ -1,4 +1,0 @@
-#!/bin/bash
-docker stop $cName
-docker rm $cName
-docker run -it --name $cName $imgName:$imgVer sh

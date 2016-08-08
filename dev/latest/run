@@ -1,3 +1,0 @@
-#!/bin/bash
-source $DOCKER_SCRIPTS/$imgName/$imgVer/clean
-docker run -it --user=$userName -v $userHome:/home/$userName --name $cName $imgName:$imgVer bash --login

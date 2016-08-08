@@ -1,4 +1,0 @@
-imgName=alpine
-imgVer=3.4
-
-cName=$imgName-$imgVer

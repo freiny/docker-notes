@@ -78,10 +78,6 @@ main
 gin-bin
 
 ####################################################
-# Rapid testing
-save-commands.json
-
-####################################################
 # Node.js
 .npm
 node_modules
