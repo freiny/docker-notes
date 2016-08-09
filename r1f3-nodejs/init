@@ -1,30 +1,12 @@
 #!/bin/sh
-
 # USAGE: init [dev | prod]
 
-imagePrefix=r1f3
-githubRepo=dockerpack-fe-nodejs
-appContainer=fe
-githubUser=freiny
+source ./clean
 
-# Clear Containers
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-docker rmi $(docker images -f "dangling=true" -q)
-
-# Clear Images
-docker rmi $(docker images -a -q)
-
-docker rmi "$imagePrefix"_rp1:latest
-docker rmi "$imagePrefix"_"$appContainer"1:latest
-docker rmi "$imagePrefix"_"$appContainer"2:latest
-docker rmi "$imagePrefix"_"$appContainer"3:latest
-
-# Clean App
-cd "$appContainer"
-rm -rf repo
-git clone https://github.com/"$githubUser"/"$githubRepo".git
-mv ./"$githubRepo" repo
+# Clone Repo
+cd fe
+git clone https://github.com/freiny/dockerpack-fe-nodejs.git
+mv ./dockerpack-fe-nodejs repo
 cd ..
 
 docker-compose --file $1.yml up

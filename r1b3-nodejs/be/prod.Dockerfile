@@ -6,7 +6,7 @@ ADD home/init /home/init
 ADD repo/src /src
 
 ENV APP_ENVIRONMENT prod
-ENV HTTP_PORT 9080
-EXPOSE  9080
+ENV HTTP_PORT 20000
+EXPOSE  20000
 
 CMD ["sh", "-c", "source /home/init prod"]

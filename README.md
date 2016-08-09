@@ -12,12 +12,20 @@ Code for the frontend or backend servers is cloned down from a Github project. U
 
 In each project folder there is an init script that builds either a development or production version of the project.
 
+There is also a clean script that deletes the project's images, containers, and cloned-down repos.
+
 ### Setup
 From the project path:
 
-	$ ./init dev
+	For Clean-up:
 
-	$ ./init prod
+		$ ./clean
+
+	For Setup:
+
+		$ ./init dev
+
+		$ ./init prod
 
 ### From a web browser:
 
@@ -35,7 +43,5 @@ From the project path:
 
 
 ## Notes
-
-Be aware, the init script removes all docker containers and images running or otherwise.
 
 The development build treats the source code folder as a mounted host volume and reloads the server whenever a change is detected in the folder.

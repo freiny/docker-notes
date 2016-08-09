@@ -15,7 +15,7 @@ services:
       context: ./be
       dockerfile: dev.Dockerfile
     ports:
-      - 9081:9080
+      - 24001:24000
     volumes:
       - ./be/repo/src:/src
       - ./be/home:/home

@@ -18,18 +18,18 @@ services:
       context: ./be
       dockerfile: prod.Dockerfile
     ports:
-      - 9081:9080
+      - 20001:20000
 
   be2:
     build:
       context: ./be
       dockerfile: prod.Dockerfile
     ports:
-      - 9082:9080
+      - 20002:20000
 
   be3:
     build:
       context: ./be
       dockerfile: prod.Dockerfile
     ports:
-      - 9083:9080
+      - 20003:20000

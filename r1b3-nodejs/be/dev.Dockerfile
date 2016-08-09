@@ -4,7 +4,7 @@ RUN apk add --update nodejs && \
 apk add --update inotify-tools
 
 ENV APP_ENVIRONMENT dev
-ENV HTTP_PORT 9080
-EXPOSE  9080
+ENV HTTP_PORT 24000
+EXPOSE  24000
 
 CMD ["sh", "-c", "source /home/init dev"]
