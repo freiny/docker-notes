@@ -73,11 +73,15 @@ jspm_packages
 .node_repl_history
 
 ####################################################
+# Node.js
+.npm
+node_modules
+
+####################################################
 # Golang generated files
 main
 gin-bin
 
 ####################################################
-# Node.js
-.npm
-node_modules
+# Cloned-Down Repos
+repo
