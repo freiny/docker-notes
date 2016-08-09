@@ -1,0 +1,31 @@
+#!/bin/sh
+
+case $1 in
+
+	dev)
+		cd /src
+		npm install
+		npm start &
+		ps -ef
+		echo "*********************** APP READY"
+
+		while inotifywait -e modify /src; do
+
+			killall -9 node
+			npm start &
+			ps ef
+			echo "*********************** APP READY"
+
+		done
+	;;
+
+	prod)
+		cd /src
+		npm install
+		npm start
+	;;
+
+	*)
+		echo "Init Container: init [dev | prod]"
+
+esac

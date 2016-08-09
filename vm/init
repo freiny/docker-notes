@@ -1,0 +1,18 @@
+#!/bin/sh
+# USAGE: init [dev | prod]
+
+source ./clean
+
+# Clone Repo
+cd fe
+git clone https://github.com/freiny/dockerpack-fe-vm.git
+mv ./dockerpack-fe-vm repo
+cd ..
+
+cd be
+git clone https://github.com/freiny/dockerpack-be-vm.git
+mv ./dockerpack-be-vm repo
+cd ..
+
+# Build and Run Docker Images/Containers
+docker-compose --file $1.yml up
