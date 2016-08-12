@@ -1,0 +1,35 @@
+version: '2'
+services:
+
+  rp1:
+    build:
+      context: ./rp
+      dockerfile: prod.Dockerfile
+
+    links:
+      - be1:be1
+      - be2:be2
+      - be3:be3
+    ports:
+      - 80:80
+
+  be1:
+    build:
+      context: ./be
+      dockerfile: prod.Dockerfile
+    ports:
+      - 20001:20000
+
+  be2:
+    build:
+      context: ./be
+      dockerfile: prod.Dockerfile
+    ports:
+      - 20002:20000
+
+  be3:
+    build:
+      context: ./be
+      dockerfile: prod.Dockerfile
+    ports:
+      - 20003:20000

@@ -3,25 +3,15 @@
 case $1 in
 
 	dev)
-		echo "********************************** ls -al"
-		ls -al
-		echo "********************************** ls -al /src"
-		ls -al /src
-		echo "**********************************"
-		
  		cd /src
 		npm install
 		npm start &
 		ps -ef
-		echo "*********************** APP READY"
 
 		while inotifywait -e modify /src; do
-
 			killall -9 node
 			npm start &
 			ps ef
-			echo "*********************** APP READY"
-
 		done
 	;;
 
