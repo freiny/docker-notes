@@ -9,15 +9,24 @@ services:
       - be1:be1
     ports:
       - 4000:4000
-    network_mode: "bridge"
+    # network_mode: "bridge"
 
   be1:
     build:
       context: ./be
       dockerfile: dev.Dockerfile
+    links:
+      - ch1:ch1
     ports:
       - 24001:24000
-    network_mode: "bridge"
+    # network_mode: "bridge"
     volumes:
       - ./be/repo/src:/src
       - ./be/home:/home
+
+  ch1:
+    build:
+      context: ./ch
+      dockerfile: dev.Dockerfile
+    ports:
+      - 30000:30000
