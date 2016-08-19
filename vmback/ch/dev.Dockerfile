@@ -1,7 +1,12 @@
 FROM alpine:3.4
 
-RUN apk add --update nginx && rm -rf /var/cache/apk/*
-RUN rm -v /etc/nginx/nginx.conf
-ADD dev.conf /etc/nginx/nginx.conf
-EXPOSE 4000
-CMD ["nginx"]
+RUN apk add --update redis
+
+EXPOSE 6379
+
+RUN mkdir /data
+ADD home/init /home/init
+
+WORKDIR /data
+
+CMD ["sh", "-c", "source /home/init dev"]

@@ -4,6 +4,7 @@ imagePrefix=vmback
 
 # Stop Containers
 docker stop "$imagePrefix"_rp1_1
+docker stop "$imagePrefix"_ch1_1
 docker stop "$imagePrefix"_be1_1
 docker stop "$imagePrefix"_be2_1
 docker stop "$imagePrefix"_be3_1
@@ -13,6 +14,7 @@ docker stop "$imagePrefix"_fe3_1
 
 # Remove Containers
 docker rm "$imagePrefix"_rp1_1
+docker rm "$imagePrefix"_ch1_1
 docker rm "$imagePrefix"_fe1_1
 docker rm "$imagePrefix"_fe2_1
 docker rm "$imagePrefix"_fe3_1
@@ -22,6 +24,7 @@ docker rm "$imagePrefix"_be3_1
 
 # Remove Images
 docker rmi "$imagePrefix"_rp1:latest
+docker rmi "$imagePrefix"_ch1:latest
 docker rmi "$imagePrefix"_fe1:latest
 docker rmi "$imagePrefix"_fe2:latest
 docker rmi "$imagePrefix"_fe3:latest

@@ -15,8 +15,8 @@ services:
     build:
       context: ./be
       dockerfile: dev.Dockerfile
-    links:
-      - ch1:ch1
+    # links:
+    #   - ch1:ch1
     ports:
       - 24001:24000
     # network_mode: "bridge"
@@ -29,4 +29,7 @@ services:
       context: ./ch
       dockerfile: dev.Dockerfile
     ports:
-      - 30000:30000
+      - 6379:6379
+    # volumes:
+    #   - ./ch/data:/data
+    # tty: true
