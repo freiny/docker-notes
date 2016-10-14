@@ -1,3 +1,0 @@
-#!/bin/sh
-rm -rf ./fe/repo
-rm -rf ./be/repo

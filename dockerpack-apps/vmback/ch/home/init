@@ -1,6 +1,0 @@
-#!/bin/sh
-app="[Docker Redis Server]"
-echo $app
-
-redis-server &&
-echo $app started

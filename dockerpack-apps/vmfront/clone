@@ -1,6 +1,0 @@
-#!/bin/sh
-
-cd fe
-git clone https://github.com/freiny/dockerpack-fe-vm.git
-mv ./dockerpack-fe-vm repo
-cd ..
