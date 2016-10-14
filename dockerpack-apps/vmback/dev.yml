@@ -1,0 +1,36 @@
+version: '2'
+services:
+
+  rp1:
+    build:
+      context: ./rp
+      dockerfile: dev.Dockerfile
+    links:
+      - be1:be1
+    ports:
+      - 4000:4000
+    network_mode: "bridge"
+
+  be1:
+    build:
+      context: ./be
+      dockerfile: dev.Dockerfile
+    links:
+      - ch1:ch1
+    ports:
+      - 24001:24000
+    network_mode: "bridge"
+    volumes:
+      - ./be/repo/src:/src
+      - ./be/home:/home
+
+  ch1:
+    build:
+      context: ./ch
+      dockerfile: dev.Dockerfile
+    ports:
+      - 6379:6379
+    network_mode: "bridge"
+    # volumes:
+    #   - ./ch/data:/data
+    # tty: true

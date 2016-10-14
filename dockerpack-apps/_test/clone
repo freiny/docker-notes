@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd be
+git clone https://github.com/freiny/dockerpack-be-vm.git
+mv ./dockerpack-be-vm repo
+cd ..

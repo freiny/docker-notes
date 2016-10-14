@@ -1,0 +1,12 @@
+#!/bin/sh
+# USAGE: init [dev | prod]
+
+source ./clean
+
+# Clone Repo
+cd be
+git clone https://github.com/freiny/dockerpack-be-nodejs.git
+mv ./dockerpack-be-nodejs repo
+cd ..
+
+docker-compose --file $1.yml up

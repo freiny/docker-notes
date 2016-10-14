@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# source ./goget
+go get github.com/gin-gonic/gin
+
+case $1 in
+
+	dev)
+		cd /src
+		rm main
+		go build -o main
+		./main &
+		ps -ef
+		echo
+
+		while inotifywait -e modify /src; do
+
+			killall -9 main
+			rm main
+			go build -o main
+			./main &
+			ps ef
+			echo
+
+		done
+	;;
+
+	prod)
+		cd /src
+		rm main
+		go build -o main
+		./main
+	;;
+
+	*)
+		echo "Init Container: init [dev | prod]"
+
+esac

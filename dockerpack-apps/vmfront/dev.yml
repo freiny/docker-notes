@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+  rp1:
+    build:
+      context: ./rp
+      dockerfile: dev.Dockerfile
+    links:
+      - fe1:fe1
+    external_links:
+      - vmback_rp1_1
+    ports:
+      - 3000:3000
+    # network_mode: "bridge"
+
+  fe1:
+    build:
+      context: ./fe
+      dockerfile: dev.Dockerfile
+    ports:
+      - 13001:13000
+    # network_mode: "bridge"
+    volumes:
+      - ./fe/repo/src:/src
+      - ./fe/home:/home

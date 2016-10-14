@@ -1,0 +1,28 @@
+#!/bin/sh
+
+case $1 in
+	dev)
+		cd /src
+		npm install
+		npm start &
+		ps -ef
+		echo
+
+		while inotifywait -e modify /src --recursive --exclude "npm-debug.log"; do
+			killall -9 node
+			npm start &
+			ps ef
+			echo
+		done
+	;;
+
+	prod)
+		cd /src
+		npm install
+		npm start
+	;;
+
+	*)
+		echo "Init Container: init [dev | prod]"
+
+esac
