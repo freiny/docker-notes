@@ -1,0 +1,1 @@
+nc -z www.example.com 80

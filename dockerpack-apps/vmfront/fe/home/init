@@ -8,7 +8,7 @@ case $1 in
 		npm start &
 		ps -ef
 
-		while inotifywait -e modify /src --exclude "npm-debug.log"; do
+		while inotifywait -e modify /src --recursive --exclude "npm-debug.log"; do
 			killall -9 node
 			npm start &
 			ps ef
